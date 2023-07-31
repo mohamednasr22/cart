@@ -1,0 +1,168 @@
+<h3>Create Order</h3>
+<div class="container-fluid">
+  <div class="row">
+    <!-- hint -->
+    <!-- Items Available -->
+    <div class="col-4">
+      <h4>Items Available</h4>
+      <div id="list-example" class="list-group" *ngFor="let item of available_items">
+        <a class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#orderModel"
+          (click)="selectItem(item,0)"><i class="fa fa-cart-plus" aria-hidden="true"></i>
+          {{item.name}}</a>
+
+      </div>
+    </div>
+
+
+    <!-- hint -->
+    <!-- Items Available -->
+    <div class="col-4">
+      <h4>Trays Available</h4>
+      <div id="list-example" class="list-group" *ngFor="let item of available_trays">
+        <a class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#orderModel"
+          (click)="selectItem(item,0)"><i class="fa fa-cart-plus" aria-hidden="true"></i>
+          {{item.name}}</a>
+
+      </div>
+    </div>
+
+    
+    <!-- hint -->
+    <!-- add item to  order -->
+
+    <div class="col-4">
+      <div style="display: flex;    justify-content: space-between;">
+        <h4>Order</h4>
+        <button class="btn btn-success" [disabled]="current_order.length<=0" (click)="saveOrder()">save</button>
+      </div>
+      
+      <div id="list-example" class="list-group" *ngFor="let item_order of current_order;let i=index">
+        
+        
+      </div>
+    </div>
+
+
+    
+
+
+  </div>
+</div>
+<!-- hint -->
+<!--  order modal pop -->
+<div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="orderModelLabel" aria-hidden="true" #order_model>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" *ngIf="modalStatus==0">add {{current_item?.name}} </h5>
+        <h5 class="modal-title" id="exampleModalLabel" *ngIf="modalStatus==1">update {{current_item?.name}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="!noAdd">
+        <div class="mb-3">
+          <label class="form-label">Qunatity</label>
+          <input min="0" type="number" [(ngModel)]="input_qunatity" class="form-control"
+            placeholder="Enter required qunatity">
+        </div>
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="input_qunatity<=0" (click)="addItem()"
+            *ngIf="modalStatus==0" data-bs-dismiss="modal">Add</button>
+          <button type="button" class="btn btn-primary" [disabled]="input_qunatity<=0" (click)="addItem()"
+            *ngIf="modalStatus==1" data-bs-dismiss="modal">Update</button>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="noAdd">
+        <p class="text-danger">This item added before</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 
+  [class.show]="current_item != null && openModelToEdit"
+  
+  
+  
+  <div>
+  <div class="column-12 tablet:column-6 laptop:column-6 margin-bottom-xl">
+    <div class="card padding-x-3xl laptop:padding-x-6xl"
+      style="--card-background: var(--fa-navy); --card-color: var(--white); height: 100%;">
+      <div class="examples-transitline display-flex flex-content-center flex-column" style="height: 100%;">
+        <h4 class="sr-only">An example of a transit line using icons</h4>
+        <div class="display-flex flex-content-between"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+            data-icon="trees" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+            class="svg-inline--fa fa-trees fa-fw fa-2x" style="color: var(--example-color);">
+            <path fill="currentColor"
+              d="M70.2 121.4L178.5 5.8C182 2.1 186.9 0 192 0s10 2.1 13.5 5.8L313.8 121.4c4 4.3 6.2 9.9 6.2 15.7c0 12.7-10.3 22.9-22.9 22.9H272l74.6 89.5c3.5 4.2 5.4 9.5 5.4 15c0 13-10.5 23.5-23.5 23.5H304l74.6 89.5c3.5 4.2 5.4 9.5 5.4 15c0 13-10.5 23.5-23.5 23.5H224v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416H23.5C10.5 416 0 405.5 0 392.5c0-5.5 1.9-10.8 5.4-15L80 288H55.5c-13 0-23.5-10.5-23.5-23.5c0-5.5 1.9-10.8 5.4-15L112 160H86.9C74.3 160 64 149.7 64 137.1c0-5.8 2.2-11.4 6.2-15.7zm271.4-16.4L434.5 5.8C438 2.1 442.9 0 448 0s10 2.1 13.5 5.8L569.8 121.4c4 4.3 6.2 9.9 6.2 15.7c0 12.7-10.3 22.9-22.9 22.9H528l74.6 89.5c3.5 4.2 5.4 9.5 5.4 15c0 13-10.5 23.5-23.5 23.5H560l74.6 89.5c3.5 4.2 5.4 9.5 5.4 15c0 13-10.5 23.5-23.5 23.5H480v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416l0-23.4 0-.1 0-.1V392h0c-.1-12.8-4.7-25.2-12.9-35l-40.6-48.7c13-10.2 21.4-26 21.4-43.8c0-13-4.6-25.6-12.9-35.5l-40.4-48.5c12.9-10 21.3-25.8 21.3-43.4c0-11.6-3.7-22.8-10.4-32.1z"
+              class=""></path>
+          </svg> <i class="fas fa-cart-plus fa-fw fa-2x fa-beat-fade"
+            style="color: var(--example-color); --fa-animation-duration: 2s;"></i> <svg aria-hidden="true"
+            focusable="false" data-prefix="fal" data-icon="house" role="img" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 576 512" class="svg-inline--fa fa-house fa-fw fa-2x" style="color: var(--fa-gravy);">
+            <path fill="currentColor"
+              d="M298.6 4c-6-5.3-15.1-5.3-21.2 0L5.4 244c-6.6 5.8-7.3 16-1.4 22.6s16 7.3 22.6 1.4L64 235V432c0 44.2 35.8 80 80 80H432c44.2 0 80-35.8 80-80V235l37.4 33c6.6 5.8 16.7 5.2 22.6-1.4s5.2-16.7-1.4-22.6L298.6 4zM96 432V206.7L288 37.3 480 206.7V432c0 26.5-21.5 48-48 48H368V320c0-17.7-14.3-32-32-32H240c-17.7 0-32 14.3-32 32V480H144c-26.5 0-48-21.5-48-48zm144 48V320h96V480H240z"
+              class=""></path>
+          </svg> <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="buildings" role="img"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-buildings fa-fw fa-2x"
+            style="color: var(--fa-gravy);">
+            <path fill="currentColor"
+              d="M448 32c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32H448zM288 0c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H288zM192 128H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H216.4c-8.3-9.2-14.8-20.1-19-32H64c-17.7 0-32-14.3-32-32V192c0-17.7 14.3-32 32-32H192V128zM88 320c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24V344c0-13.3-10.7-24-24-24H88zm8 64V352h32v32H96zm224 8c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24V344c0-13.3-10.7-24-24-24H344c-13.3 0-24 10.7-24 24v48zm32-8V352h32v32H352zM88 192c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24V216c0-13.3-10.7-24-24-24H88zm8 64V224h32v32H96zM320 88v48c0 13.3 10.7 24 24 24h48c13.3 0 24-10.7 24-24V88c0-13.3-10.7-24-24-24H344c-13.3 0-24 10.7-24 24zm32 8h32v32H352V96zm-8 192h48c13.3 0 24-10.7 24-24V216c0-13.3-10.7-24-24-24H344c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24zm8-64h32v32H352V224z"
+              class=""></path>
+          </svg></div>
+        <div class="position-relative display-flex margin-y-3xl margin-x-sm size-xs" style="height: 1em;">
+          <div class="position-absolute z-index-2"
+            style="top: -0.5em; left: 0px; border: 0.5em solid var(--white); height: 2em; width: 2em; border-radius: var(--border-radius-lg); background-color: var(--example-color);">
+            &nbsp;
+          </div>
+          <div class="padding-4xs"
+            style="flex-grow: 2; background: var(--white); border-radius: var(--border-radius-lg);">
+            <div style="border-top: 0.5em solid var(--example-color); height: 1px;">&nbsp;</div>
+          </div>
+          <div class="position-absolute z-index-2"
+            style="top: -0.5em; left: 31%; border: 0.5em solid var(--white); height: 2em; width: 2em; border-radius: var(--border-radius-lg); background-color: var(--example-color);">
+            &nbsp;
+          </div>
+          <div class="padding-4xs"
+            style="flex-grow: 2; background: var(--white); border-radius: var(--border-radius-lg);">
+            <div style="border-top: 0.5em dotted var(--example-color); height: 1px;">&nbsp;</div>
+          </div>
+          <div class="position-absolute z-index-2"
+            style="top: -0.5em; right: 31%; border: 0.5em solid var(--white); height: 2em; width: 2em; border-radius: var(--border-radius-lg); background-color: var(--example-color);">
+            &nbsp;
+          </div>
+          <div class="padding-4xs"
+            style="flex-grow: 2; background: var(--white); border-radius: var(--border-radius-lg);">
+            <div style="border-top: 0.5em solid var(--white); height: 1px;">&nbsp;</div>
+          </div>
+          <div class="position-absolute z-index-2"
+            style="top: -0.5em; right: 0px; border: 0.5em solid var(--white); height: 2em; width: 2em; border-radius: var(--border-radius-lg); background-color: var(--example-color);">
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!--  <div class="col-8">
+    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example"
+      tabindex="0">
+      <h4 id="list-item-1">Item 1</h4>
+      <p>...</p>
+      <h4 id="list-item-2">Item 2</h4>
+      <p>...</p>
+      <h4 id="list-item-3">Item 3</h4>
+      <p>...</p>
+      <h4 id="list-item-4">Item 4</h4>
+      <p>...</p>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="card">
+    <p-toast></p-toast>
+    <button type="button" pButton pRipple (click)="show()" label="Show" class="p-button-success"></button>
+</div> -->
